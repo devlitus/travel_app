@@ -1,107 +1,110 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'colors.dart';
 
-/// Define el sistema tipográfico para la aplicación de viajes.
-///
-/// Utiliza Google Fonts y establece una jerarquía clara para diferentes propósitos.
+/// Define la tipografía personalizada para la aplicación
 class TravelTypography {
-  // Fuente principal para títulos
-  static String get _headingFontFamily => GoogleFonts.montserrat().fontFamily!;
+  /// Tema de texto completo para toda la aplicación
+  static TextTheme get textTheme {
+    return const TextTheme(
+      // Estilos para títulos grandes
+      displayLarge: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+        letterSpacing: -0.5,
+        color: TravelColors.textPrimary,
+      ),
+      displayMedium: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        letterSpacing: -0.25,
+        color: TravelColors.textPrimary,
+      ),
+      displaySmall: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 0,
+        color: TravelColors.textPrimary,
+      ),
 
-  // Fuente para cuerpo de texto
-  static String get _bodyFontFamily => GoogleFonts.roboto().fontFamily!;
+      // Estilos para encabezados
+      headlineLarge: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        color: TravelColors.textPrimary,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        color: TravelColors.textPrimary,
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        color: TravelColors.textPrimary,
+      ),
 
-  /// Configuración de estilo para los textos de la aplicación
-  static TextTheme textTheme = TextTheme(
-    // Títulos grandes para pantallas principales
-    headlineLarge: TextStyle(
-      fontFamily: _headingFontFamily,
-      fontSize: 32,
-      fontWeight: FontWeight.bold,
-      letterSpacing: -0.5,
-    ),
+      // Estilos para títulos
+      titleLarge: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.15,
+        color: TravelColors.textPrimary,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.15,
+        color: TravelColors.textPrimary,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.1,
+        color: TravelColors.textPrimary,
+      ),
 
-    // Títulos medianos para encabezados de secciones
-    headlineMedium: TextStyle(
-      fontFamily: _headingFontFamily,
-      fontSize: 28,
-      fontWeight: FontWeight.bold,
-      letterSpacing: -0.25,
-    ),
+      // Estilos para cuerpo de texto
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.15,
+        color: TravelColors.textPrimary,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.25,
+        color: TravelColors.textPrimary,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.4,
+        color: TravelColors.textSecondary,
+      ),
 
-    // Títulos pequeños para subsecciones
-    headlineSmall: TextStyle(
-      fontFamily: _headingFontFamily,
-      fontSize: 24,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0,
-    ),
-
-    // Títulos de tarjetas o elementos destacados
-    titleLarge: TextStyle(
-      fontFamily: _headingFontFamily,
-      fontSize: 22,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0,
-    ),
-
-    // Subtítulos (nombre de hoteles, destinos, etc.)
-    titleMedium: TextStyle(
-      fontFamily: _headingFontFamily,
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0.15,
-    ),
-
-    // Etiquetas y elementos pequeños destacados
-    titleSmall: TextStyle(
-      fontFamily: _headingFontFamily,
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0.1,
-    ),
-
-    // Texto de cuerpo grande (descripciones principales)
-    bodyLarge: TextStyle(
-      fontFamily: _bodyFontFamily,
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.5,
-      height: 1.5,
-    ),
-
-    // Texto de cuerpo estándar
-    bodyMedium: TextStyle(
-      fontFamily: _bodyFontFamily,
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.25,
-      height: 1.4,
-    ),
-
-    // Texto pequeño (detalles, información secundaria)
-    bodySmall: TextStyle(
-      fontFamily: _bodyFontFamily,
-      fontSize: 12,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.4,
-      height: 1.3,
-    ),
-
-    // Etiqueta para botones
-    labelLarge: TextStyle(
-      fontFamily: _bodyFontFamily,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 1.25,
-    ),
-
-    // Etiquetas más pequeñas
-    labelSmall: TextStyle(
-      fontFamily: _bodyFontFamily,
-      fontSize: 10,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 1.5,
-    ),
-  );
+      // Estilos para etiquetas
+      labelLarge: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.1,
+        color: TravelColors.primary,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.5,
+        color: TravelColors.primary,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.5,
+        color: TravelColors.primary,
+      ),
+    );
+  }
 }
