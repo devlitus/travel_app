@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:travel/presentation/screens/auth/login_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel/presentation/screens/auth/register_screen.dart';
 
 import 'theme/theme.dart';
@@ -11,15 +11,17 @@ class TravelApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Travel App',
-      debugShowCheckedModeBanner: false,
-      // Aplica el tema según la preferencia
-      theme: TravelTheme.light(),
-      darkTheme: TravelTheme.dark(),
-      themeMode: ThemeMode.light, // Por defecto usamos tema claro
-      // Aquí configuraremos las rutas más adelante
-      home: RegisterScreen(), // Pantalla de inicio de sesión
+    return ProviderScope(
+      child: MaterialApp(
+        title: 'Travel App',
+        debugShowCheckedModeBanner: false,
+        // Aplica el tema según la preferencia
+        theme: TravelTheme.light(),
+        darkTheme: TravelTheme.dark(),
+        themeMode: ThemeMode.light, // Por defecto usamos tema claro
+        // Aquí configuraremos las rutas más adelante
+        home: const RegisterScreen(), // Pantalla de inicio de sesión
+      ),
     );
   }
 }

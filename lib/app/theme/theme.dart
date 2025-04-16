@@ -14,57 +14,23 @@ class TravelTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      colorScheme: const ColorScheme(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: TravelColors.primary,
         brightness: Brightness.light,
-        primary: TravelColors.primary,
-        onPrimary: Colors.white,
-        primaryContainer: TravelColors.primaryLight,
-        onPrimaryContainer: Colors.white,
-        secondary: TravelColors.secondary,
-        onSecondary: Colors.white,
-        secondaryContainer: Color(0xFFFFE082),
-        onSecondaryContainer: Color(0xFF3E2D00),
-        tertiary: TravelColors.tertiary,
-        onTertiary: Colors.white,
-        tertiaryContainer: Color(0xFFA7F3D0),
-        onTertiaryContainer: Color(0xFF002115),
-        error: TravelColors.error,
-        onError: Colors.white,
-        errorContainer: Color(0xFFFFDAD6),
-        onErrorContainer: Color(0xFF410002),
-        surface: TravelColors.surface,
-        onSurface: TravelColors.onSurface,
-        outline: Color(0xFFA7A7A7),
-        surfaceContainerHighest: Color(0xFFE7E0EC),
-        onSurfaceVariant: Color(0xFF49454F),
-        shadow: TravelColors.cardShadow,
       ),
 
       // Aplica la tipografía personalizada
       textTheme: TravelTypography.textTheme,
 
       // Estilos de AppBar
-      appBarTheme: AppBarTheme(
-        backgroundColor: TravelColors.surface,
-        elevation: TravelStyles.elevationS,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: TravelColors.primary),
-        titleTextStyle: TravelTypography.textTheme.headlineSmall,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      ),
+      appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
 
       // Estilos de botones elevados
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: TravelColors.primary,
           foregroundColor: Colors.white,
-          minimumSize: const Size(88, 48),
-          padding: TravelStyles.paddingHorizontalM,
-          elevation: TravelStyles.elevationS,
-          shape: RoundedRectangleBorder(
-            borderRadius: TravelStyles.borderRadiusAllM,
-          ),
-          textStyle: TravelTypography.textTheme.labelLarge,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
 
@@ -109,25 +75,28 @@ class TravelTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: TravelStyles.paddingM,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
-          borderSide: const BorderSide(color: Color(0xFFDDDDDD), width: 1),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: TravelColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
-          borderSide: const BorderSide(color: Color(0xFFDDDDDD), width: 1),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: TravelColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: TravelColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
-          borderSide: const BorderSide(color: TravelColors.error, width: 1),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: TravelColors.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: TravelColors.error, width: 2),
         ),
         labelStyle: TravelTypography.textTheme.bodyMedium,
@@ -183,6 +152,10 @@ class TravelTheme {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         },
       ),
+
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: TravelColors.primary,
+      ),
     );
   }
 
@@ -191,30 +164,9 @@ class TravelTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: ColorScheme(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: TravelColors.primary,
         brightness: Brightness.dark,
-        primary: TravelColors.primaryLight,
-        onPrimary: Colors.black,
-        primaryContainer: TravelColors.primary.withOpacity(0.7),
-        onPrimaryContainer: Colors.white,
-        secondary: TravelColors.secondary.withOpacity(0.8),
-        onSecondary: Colors.black,
-        secondaryContainer: TravelColors.secondary.withOpacity(0.3),
-        onSecondaryContainer: Colors.white,
-        tertiary: TravelColors.tertiary.withOpacity(0.8),
-        onTertiary: Colors.black,
-        tertiaryContainer: TravelColors.tertiary.withOpacity(0.3),
-        onTertiaryContainer: Colors.white,
-        error: TravelColors.error.withOpacity(0.8),
-        onError: Colors.black,
-        errorContainer: TravelColors.error.withOpacity(0.3),
-        onErrorContainer: Colors.white,
-        surface: TravelColors.darkSurface,
-        onSurface: TravelColors.onDarkSurface,
-        surfaceContainerHighest: const Color(0xFF303030),
-        onSurfaceVariant: Colors.white70,
-        outline: Colors.white30,
-        shadow: Colors.black,
       ),
 
       // Aplica la tipografía personalizada ajustada para modo oscuro
@@ -224,19 +176,17 @@ class TravelTheme {
       ),
 
       // Estilos de AppBar para modo oscuro
-      appBarTheme: AppBarTheme(
-        backgroundColor: TravelColors.darkSurface,
-        elevation: TravelStyles.elevationM,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: TravelColors.primaryLight),
-        titleTextStyle: TravelTypography.textTheme.headlineSmall?.copyWith(
-          color: TravelColors.onDarkSurface,
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-      ),
+      appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
 
       // Resto de los estilos modificados para modo oscuro
       // (Similar al tema claro pero con los colores adaptados)
+
+      // Estilos de botones elevados
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
 
       // Estilos de tarjeta para modo oscuro
       cardTheme: CardTheme(
@@ -252,21 +202,17 @@ class TravelTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFF2A2A2A),
-        contentPadding: TravelStyles.paddingM,
-        border: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
-          borderSide: const BorderSide(color: Color(0xFF444444), width: 1),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
         ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
-          borderSide: const BorderSide(color: Color(0xFF444444), width: 1),
+          borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: TravelStyles.borderRadiusAllS,
-          borderSide: const BorderSide(
-            color: TravelColors.primaryLight,
-            width: 2,
-          ),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: TravelStyles.borderRadiusAllS,

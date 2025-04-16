@@ -1,52 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/styles.dart';
-// import '../../../core/utils/validators.dart';
+import '../../state/auth/register_form_state.dart';
+import '../../state/auth/register_provider.dart';
+import '../../state/auth/register_state.dart';
 
 /// Pantalla de registro de usuario.
 ///
 /// Permite a los nuevos usuarios crear una cuenta proporcionando
 /// su nombre, correo electrónico y contraseña.
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   /// Ruta para navegar a esta pantalla
   static const String routeName = '/register';
 
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _isPasswordVisible = false;
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
-  // Lista de estaciones y la estación seleccionada
-  final List<String> _seasons = ['Primavera', 'Verano', 'Otoño', 'Invierno'];
-  String _selectedSeason = 'Primavera'; // Valor por defecto
+  @override
+  void initState() {
+    super.initState();
+    // No necesitamos inicializar controladores - Riverpod los maneja
+  }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
+    // No necesitamos disponer controladores - Riverpod los maneja
     super.dispose();
   }
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
+    ref.read(registerFormProvider.notifier).togglePasswordVisibility();
+  }
+
+  // Esta función manejará los mensajes según el estado
+  void _handleRegisterStateChange(BuildContext context, RegisterState state) {
+    if (state is RegisterSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('¡Registro completado con éxito!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      // Aquí podrías navegar a la siguiente pantalla
+      // Navigator.pushReplacementNamed(context, HomePage.routeName);
+    } else if (state is RegisterError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${state.message}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
-    final bool isSmallScreen = screenSize.width < 600;
+
+    // Observamos los estados que necesitamos
+    final formState = ref.watch(registerFormProvider);
+    final registerState = ref.watch(registerStateProvider);
+
+    // Establecemos el listener dentro del build (correcto según Riverpod)
+    ref.listen<RegisterState>(
+      registerStateProvider,
+      (previous, current) => _handleRegisterStateChange(context, current),
+    );
+
+    // Extraemos las variables del estado del formulario para usarlas en la UI
+    final _nameController = formState.nameController;
+    final _emailController = formState.emailController;
+    final _passwordController = formState.passwordController;
+    final _isPasswordVisible = formState.isPasswordVisible;
+    final _selectedSeason = formState.selectedSeason;
+    final _seasons = ['Primavera', 'Verano', 'Otoño', 'Invierno'];
 
     return Scaffold(
       body: SafeArea(
@@ -168,9 +203,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Text(
                                 'Estación del año favorita para viajar',
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onSurface.withValues(
-                                    alpha: 0.8,
-                                  ),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.8),
                                 ),
                               ),
                             ),
@@ -187,9 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: TravelStyles.spaceM,
-                                    vertical:
-                                        TravelStyles
-                                            .spaceS, // Ajustado para centrar mejor
+                                    vertical: TravelStyles.spaceS,
                                   ),
                                   prefixIcon: Icon(Icons.wb_sunny_outlined),
                                   border: InputBorder.none,
@@ -211,9 +243,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 dropdownColor: Colors.white,
                                 borderRadius: TravelStyles.borderRadiusAllS,
                                 onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedSeason = newValue!;
-                                  });
+                                  if (newValue != null) {
+                                    ref
+                                        .read(registerFormProvider.notifier)
+                                        .updateSelectedSeason(newValue);
+                                  }
                                 },
                                 items:
                                     _seasons.map<DropdownMenuItem<String>>((
@@ -270,22 +304,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: TravelStyles.spaceL),
 
                         // Botón de registro
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              // Aquí iría la lógica de registro
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Procesando datos...'),
-                                ),
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                        if (registerState is RegisterLoading)
+                          // Mostrar indicador de carga durante el registro
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(TravelStyles.spaceM),
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        else
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                // Usamos el proveedor para iniciar el registro
+                                ref
+                                    .read(registerStateProvider.notifier)
+                                    .register(
+                                      name: _nameController.text.trim(),
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text,
+                                      preferredSeason: _selectedSeason,
+                                    );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: const Text('REGISTRARME'),
                           ),
-                          child: const Text('REGISTRARME'),
-                        ),
+
+                        // Mostrar mensaje de error si falla el registro
+                        if (registerState is RegisterError)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: TravelStyles.spaceM,
+                            ),
+                            child: Text(
+                              registerState.message,
+                              style: TextStyle(
+                                color: theme.colorScheme.error,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+
+                        // Mostrar mensaje de éxito si el registro es exitoso
+                        if (registerState is RegisterSuccess)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: TravelStyles.spaceM,
+                            ),
+                            child: Text(
+                              '¡Registro exitoso! Bienvenido, ${registerState.user.name}',
+                              style: TextStyle(
+                                color: Colors.green.shade700,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+
                         const SizedBox(height: TravelStyles.spaceM),
 
                         // Términos y condiciones
