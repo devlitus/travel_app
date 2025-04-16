@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel/presentation/screens/home/home_screen.dart';
 import '../presentation/screens/auth/login_screen.dart';
 import '../presentation/screens/auth/register_screen.dart';
 import '../presentation/screens/splash/splash_screen.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
     splash: (context) => const SplashScreen(),
     login: (context) => const LoginScreen(),
     register: (context) => const RegisterScreen(),
+    home: (context) => const HomeScreen(),
     // Agregar más rutas aquí a medida que se desarrollen más pantallas
   };
 

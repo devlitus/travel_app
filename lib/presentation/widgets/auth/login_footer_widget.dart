@@ -1,95 +1,43 @@
 import 'package:flutter/material.dart';
+import '../../common/spacing.dart';
 
-/// Sección inferior con opción de registro para la pantalla de login
-///
-/// Muestra un contenedor con gradiente que contiene una pregunta y un botón
-/// para navegar a la pantalla de registro.
+/// Widget para el footer de la pantalla de login que incluye
+/// la opción para registrarse
 class LoginFooterWidget extends StatelessWidget {
-  /// Ruta de navegación hacia la pantalla de registro
-  final String registerRoute;
-
-  /// Constructor para el widget de pie de página de login
-  const LoginFooterWidget({super.key, this.registerRoute = '/register'});
+  const LoginFooterWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return Column(
+      children: [
+        // Contenedor para las opciones sociales (se puede implementar después)
+        // const SocialLoginOptions(),
+        Spacing.height(Spacing.xl),
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.secondary.withOpacity(0.7),
-            theme.colorScheme.secondary,
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: IntrinsicWidth(
-        stepWidth: 280,
-        child: Row(
+        // Opción para crear cuenta nueva
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Text(
-                '¿No tienes una cuenta?',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.right,
-              ),
+            Text(
+              '¿No tienes una cuenta?',
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
-            const SizedBox(width: 16),
-            OutlinedButton(
+            TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, registerRoute);
+                Navigator.pushNamed(context, '/register');
               },
-              style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: theme.colorScheme.secondary,
-                side: const BorderSide(color: Colors.white, width: 1.5),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
+              child: Text(
+                'Regístrate',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                minimumSize: const Size(0, 40),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Regístrate',
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.secondary,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Icon(
-                    Icons.arrow_forward,
-                    size: 18,
-                    color: theme.colorScheme.secondary,
-                  ),
-                ],
               ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

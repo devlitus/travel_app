@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-import '../../common/input_field_widget.dart';
-import '../../common/gradient_button_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../common/spacing.dart';
+import '../../../presentation/state/auth/auth_provider.dart';
 
-/// Formulario para el inicio de sesión
-///
-/// Widget que implementa todos los campos y comportamiento necesarios
-/// para realizar el proceso de login.
-class LoginFormWidget extends StatefulWidget {
-  /// Función que se ejecuta cuando el usuario intenta iniciar sesión
-  final Future<void> Function(String email, String password)? onLogin;
+/// Widget que contiene el formulario de inicio de sesión
+class LoginFormWidget extends ConsumerStatefulWidget {
+  /// Callback que se ejecuta cuando el usuario intenta iniciar sesión
+  final void Function(String email, String password) onLogin;
 
-  /// Constructor para el widget del formulario de login
-  const LoginFormWidget({super.key, this.onLogin});
+  const LoginFormWidget({super.key, required this.onLogin});
 
   @override
-  State<LoginFormWidget> createState() => _LoginFormWidgetState();
+  ConsumerState<LoginFormWidget> createState() => _LoginFormWidgetState();
 }
 
-class _LoginFormWidgetState extends State<LoginFormWidget> {
+class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -31,102 +27,79 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     super.dispose();
   }
 
-  // Manejo del proceso de inicio de sesión
-  Future<void> _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  // Método para alternar la visibilidad de la contraseña
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
 
-      try {
-        // Verificar si se proporcionó una función de login personalizada
-        if (widget.onLogin != null) {
-          await widget.onLogin!(
-            _emailController.text.trim(),
-            _passwordController.text,
-          );
-        } else {
-          // Si no se proporcionó, usar un delay simulado
-          await Future.delayed(const Duration(seconds: 2));
-        }
-      } catch (e) {
-        // Mostrar error si ocurre alguna excepción
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      } finally {
-        // Asegurarse de quitar el indicador de carga
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      }
+  // Método para validar el formulario y llamar al callback de login
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      widget.onLogin(_emailController.text.trim(), _passwordController.text);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authNotifierProvider);
     final theme = Theme.of(context);
 
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Título del formulario
           Text(
-            'Iniciar sesión',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
+            'Iniciar Sesión',
+            style: theme.textTheme.titleLarge,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          Spacing.height(Spacing.l),
 
-          // Campo de correo electrónico
-          InputFieldWidget(
+          // Campo de email
+          TextFormField(
             controller: _emailController,
-            label: 'Correo electrónico',
-            hint: 'ejemplo@correo.com',
-            icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: 'Correo Electrónico',
+              hintText: 'ejemplo@correo.com',
+              prefixIcon: const Icon(Icons.email_outlined),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Por favor ingresa tu correo electrónico';
               }
-              if (!value.contains('@') || !value.contains('.')) {
-                return 'Por favor ingresa un correo electrónico válido';
+              if (!value.contains('@')) {
+                return 'Correo electrónico inválido';
               }
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          Spacing.height(Spacing.m),
 
           // Campo de contraseña
-          InputFieldWidget(
+          TextFormField(
             controller: _passwordController,
-            label: 'Contraseña',
-            hint: '********',
-            icon: Icons.lock_outline,
             obscureText: _obscurePassword,
-            textInputAction: TextInputAction.done,
-            suffixIcon: IconButton(
-              icon: Icon(
-                _obscurePassword
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: theme.colorScheme.primary.withOpacity(0.7),
-                size: 22,
+            decoration: InputDecoration(
+              labelText: 'Contraseña',
+              hintText: '********',
+              prefixIcon: const Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: _togglePasswordVisibility,
               ),
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -138,38 +111,51 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               return null;
             },
           ),
+          Spacing.height(Spacing.s),
 
-          // Opción "Olvidé mi contraseña"
+          // Enlace de recuperar contraseña
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                // Navegar a la pantalla de recuperación de contraseña
+                // Implementar navegación a recuperar contraseña
               },
-              style: TextButton.styleFrom(
-                foregroundColor: theme.colorScheme.primary,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                '¿Olvidaste tu contraseña?',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: const Text('¿Olvidaste tu contraseña?'),
             ),
           ),
-          const SizedBox(height: 16),
+          Spacing.height(Spacing.s),
+
+          // Mensaje de error en caso de fallo de autenticación
+          if (authState.error != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Spacing.s),
+              child: Text(
+                authState.error!,
+                style: TextStyle(color: theme.colorScheme.error, fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+            ),
 
           // Botón de inicio de sesión
-          GradientButtonWidget(
-            text: 'Iniciar Sesión',
-            isLoading: _isLoading,
-            onPressed: _handleLogin,
-            height: 56,
-            borderRadius: 16,
+          ElevatedButton(
+            onPressed: authState.isLoading ? null : _submitForm,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: Spacing.m),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child:
+                authState.isLoading
+                    ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                    : const Text(
+                      'INICIAR SESIÓN',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
           ),
         ],
       ),
