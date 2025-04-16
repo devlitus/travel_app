@@ -1,5 +1,5 @@
 {
-  "github.copilot.chat.codeGeneration.instructions": [
+  "github.copilot.chat.commitMessageGeneration.instructions": [
     {
       "text": "Use conventional commit messages following the pattern: <type>(<scope>): <description>"
     },
