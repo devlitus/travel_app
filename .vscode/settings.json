@@ -1,0 +1,30 @@
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "Use conventional commit messages following the pattern: <type>(<scope>): <description>"
+    },
+    {
+      "text": "Types include: feat, fix, docs, style, refactor, test, chore, perf"
+    },
+    {
+      "text": "Use the present tense and imperative mood in descriptions"
+    },
+    {
+      "text": "Keep the first line under 72 characters"
+    },
+    {
+      "text": "Use the body to explain what and why vs. how"
+    },
+    {
+      "text": "Include issue references in the footer when applicable"
+    },
+    {
+      "text": "Use a blank line between the subject and body"
+    },
+    {
+      "text": "Use a blank line between the body and footer"
+    }
+  ],
+  "git.inputValidationSubjectLength": 72,
+  "git.inputValidationLength": 10000
+}
