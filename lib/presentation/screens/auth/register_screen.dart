@@ -203,8 +203,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               child: Text(
                                 'Estación del año favorita para viajar',
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onSurface
-                                      .withOpacity(0.8),
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.8,
+                                  ),
                                 ),
                               ),
                             ),
@@ -400,8 +401,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                // Navegar a login si no estamos ahí
+                                // Navegar a la pantalla de login
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  '/login',
+                                );
                               },
                               child: const Text('Iniciar sesión'),
                             ),

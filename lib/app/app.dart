@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel/presentation/screens/auth/register_screen.dart';
-
+import 'routes.dart';
 import 'theme/theme.dart';
 
 /// Widget principal de la aplicación de viajes.
@@ -19,8 +18,10 @@ class TravelApp extends StatelessWidget {
         theme: TravelTheme.light(),
         darkTheme: TravelTheme.dark(),
         themeMode: ThemeMode.light, // Por defecto usamos tema claro
-        // Aquí configuraremos las rutas más adelante
-        home: const RegisterScreen(), // Pantalla de inicio de sesión
+        // Configuración de rutas
+        initialRoute: AppRoutes.initialRoute,
+        routes: AppRoutes.routes,
+        onGenerateRoute: AppRoutes.onGenerateRoute,
       ),
     );
   }
