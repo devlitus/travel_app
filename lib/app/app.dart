@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel/presentation/screens/auth/login_screen.dart';
+// import 'package:travel/presentation/screens/auth/login_screen.dart';
+import 'package:travel/presentation/screens/auth/register_screen.dart';
 
 import 'theme/theme.dart';
 
@@ -18,7 +19,7 @@ class TravelApp extends StatelessWidget {
       darkTheme: TravelTheme.dark(),
       themeMode: ThemeMode.light, // Por defecto usamos tema claro
       // Aquí configuraremos las rutas más adelante
-      home: LoginScreen(), // Pantalla de inicio de sesión
+      home: RegisterScreen(), // Pantalla de inicio de sesión
     );
   }
 }

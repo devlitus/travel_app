@@ -16,6 +16,96 @@
 - Widget files should end with "_widget.dart"
 - Screen files should end with "_screen.dart"
 
+## UI/UX
+
+### Design Principles
+- Follow Material Design 3 principles for visual consistency
+- Implement light and dark modes with smooth transitions
+- Maintain a contrast ratio of at least 4.5:1 for accessibility
+- Use subtle animations that reinforce visual hierarchy (≤300ms)
+
+### Typography
+- Use a consistent typographic scale based on Material system
+- Limit the application to 2-3 font families maximum
+- Define reusable text styles in the theme file:
+  ```dart
+  textTheme: TextTheme(
+    headlineLarge: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      letterSpacing: -0.5,
+    ),
+    // Other styles...
+  )
+  ```
+
+### Colors
+- Define a semantic color palette (primary, secondary, error, etc.)
+- Implement adaptive colors for light/dark mode
+- Use accent colors in moderation for priority action elements
+- Define color variables for the entire project in the theme:
+  ```dart
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: const Color(0xFF6200EE),
+    brightness: Brightness.light,
+  )
+  ```
+
+### Spacing
+- Use a consistent spacing system based on multiples of 8px
+- Define spacing constants:
+  ```dart
+  class Spacing {
+    static const double xs = 4.0;
+    static const double s = 8.0;
+    static const double m = 16.0;
+    static const double l = 24.0;
+    static const double xl = 32.0;
+  }
+  ```
+
+### Components
+- Create reusable components for common patterns (buttons, cards, etc.)
+- Implement skeleton widgets for loading states
+- Use adaptive widgets for different screen sizes
+- Create a component library with usage examples
+
+### Interaction Patterns
+- Provide haptic/visual feedback for all interactions
+- Implement consistent page transitions (duration: 300ms)
+- Use intuitive and consistent gestures throughout the app
+- Implement error, empty, and loading states for all views
+
+### Responsiveness
+- Design for mobile first, then adapt to tablets and large screens
+- Use `LayoutBuilder` or `MediaQuery` to adapt to different sizes
+- Implement standard breakpoints:
+  ```dart
+  class BreakPoints {
+    static const double mobile = 600;
+    static const double tablet = 900;
+    static const double desktop = 1200;
+  }
+  ```
+
+### Accessibility
+- Ensure all interactive elements have minimum size of 48px
+- Include semantic labels for screen readers
+- Test keyboard/TalkBack navigation
+- Implement dynamic font scaling respecting system settings
+
+### Consistency
+- Maintain alignment and vertical rhythm across all screens
+- Use the same icons for the same actions throughout the app
+- Create a consistent visual language for states (error, success, warning)
+- Document design decisions in a specific README file
+
+### Performance
+- Optimize rendering of long lists with `ListView.builder`
+- Implement lazy loading for images and information
+- Measure and optimize first render time for each screen
+- Avoid unnecessary rebuilds with `const` and memoized widgets
+
 ## Patterns to follow
 
 ### Model
