@@ -30,7 +30,7 @@ class LoginFooterWidget extends StatelessWidget {
               Navigator.pushNamed(context, '/register');
             },
             child: Container(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: Spacing.m,
                 horizontal: Spacing.xl,
               ),
