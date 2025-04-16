@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel/presentation/screens/home/home_screen.dart';
 import '../presentation/screens/auth/login_screen.dart';
 import '../presentation/screens/auth/register_screen.dart';
 
@@ -11,6 +12,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     LoginScreen.routeName: (context) => const LoginScreen(),
     RegisterScreen.routeName: (context) => const RegisterScreen(),
+    HomeScreen.routeName: (context) => const HomeScreen(),
     // Agregar más rutas aquí a medida que se desarrollen más pantallas
   };
 

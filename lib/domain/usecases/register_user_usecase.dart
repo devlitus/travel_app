@@ -16,10 +16,10 @@ class RegisterUserUseCase {
     required String preferredSeason,
   }) async {
     return await _repository.registerUser(
-      name: name,
-      email: email,
-      password: password,
-      preferredSeason: preferredSeason,
+      name,
+      email,
+      password,
+      preferredSeason,
     );
   }
 }

@@ -6,6 +6,7 @@ import '../../common/spacing.dart';
 import '../../widgets/auth/login_header_widget.dart';
 import '../../widgets/auth/login_footer_widget.dart';
 import '../../widgets/auth/login_form_widget.dart';
+import '../../../presentation/state/auth/auth_provider.dart'; // Asumiendo que este es tu provider
 
 /// Pantalla de login para la aplicación de viajes
 class LoginScreen extends ConsumerWidget {
@@ -17,6 +18,9 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
+    // Observar el estado de autenticación
+    final authState = ref.watch(authNotifierProvider);
+
     // Configurar la barra de estado para una mejor integración visual
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -24,6 +28,18 @@ class LoginScreen extends ConsumerWidget {
         statusBarIconBrightness: Brightness.light,
       ),
     );
+
+    // Reaccionar a cambios en el estado
+    if (authState.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (authState.isAuthenticated) {
+      // Navegar a la pantalla principal después de autenticar
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, '/home');
+      });
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -59,15 +75,13 @@ class LoginScreen extends ConsumerWidget {
                         CardContainerWidget(
                           padding: const EdgeInsets.all(Spacing.l),
                           child: LoginFormWidget(
-                            onLogin: (email, password) async {
-                              // Aquí iría la implementación real de login
-                              await Future.delayed(const Duration(seconds: 2));
-
-                              // Simulación de login exitoso
-                              if (context.mounted) {
-                                // Navegar a la pantalla principal después de login
-                                // Navigator.pushReplacementNamed(context, '/home');
-                              }
+                            onLogin: (email, password) {
+                              // Obtener el controlador de autenticación
+                              final authNotifier = ref.read(
+                                authNotifierProvider.notifier,
+                              );
+                              // Iniciar el proceso de login
+                              authNotifier.login(email, password);
                             },
                           ),
                         ),

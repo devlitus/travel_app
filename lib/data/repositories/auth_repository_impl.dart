@@ -1,68 +1,70 @@
-import 'package:flutter/foundation.dart';
-import '../../domain/entities/user_entity.dart';
-import '../../domain/repositories/auth_repository.dart';
+import 'package:travel/domain/entities/user_entity.dart';
+import 'package:travel/domain/repositories/auth_repository.dart';
 
 /// Implementación del repositorio de autenticación
 class AuthRepositoryImpl implements AuthRepository {
+  // Aquí podrías inyectar las fuentes de datos (API, local storage, etc.)
+  // AuthDatasource _authDatasource;
+
+  // Simulación para demo - reemplazar con implementación real
   @override
-  Future<UserEntity> loginUser({
-    required String email,
-    required String password,
-  }) async {
-    // Simulamos una demora de red
+  Future<UserEntity> loginUser(String email, String password) async {
+    // Simular un retraso de red
     await Future.delayed(const Duration(seconds: 1));
 
-    // Simulamos validación de credenciales
-    if (email == 'test@example.com' && password == 'password123') {
+    // En una implementación real, se validaría con un backend
+    if (email == 'test@ejemplo.com' && password == '12345678') {
       return const UserEntity(
         id: '1',
-        name: 'Usuario de Prueba',
-        email: 'test@example.com',
-        preferredSeason: 'Primavera',
+        name: 'Usuario Ejemplo',
+        email: 'usuario@ejemplo.com',
+        preferredSeason: 'Verano',
       );
     } else {
-      // Simulamos un error de autenticación
-      throw Exception('Credenciales incorrectas');
+      throw Exception('Credenciales inválidas');
     }
   }
 
   @override
   Future<void> logoutUser() async {
-    // Simulamos una demora de red
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    // En una implementación real, aquí eliminaríamos tokens, sesiones, etc.
-    debugPrint('Usuario cerró sesión');
+    // Simula cierre de sesión
+    await Future.delayed(const Duration(milliseconds: 300));
+    // En implementación real: eliminar token de SharedPreferences, etc.
     return;
   }
 
   @override
-  Future<UserEntity> registerUser({
-    required String name,
-    required String email,
-    required String password,
-    required String preferredSeason,
-  }) async {
-    // Simulamos una demora de red
-    await Future.delayed(const Duration(seconds: 2));
+  Future<UserEntity?> getCurrentUser() async {
+    // En una implementación real, verificaría si hay un token válido
+    // y obtendría la información del usuario desde SharedPreferences o API
+    return null; // Por ahora retornamos null (no autenticado)
+  }
 
-    // Validamos el formato del email (simplificado)
-    if (!email.contains('@')) {
-      throw Exception('El formato del correo electrónico no es válido');
-    }
+  @override
+  Future<UserEntity> registerUser(
+    String name,
+    String email,
+    String password,
+    String preferredSeason,
+  ) async {
+    // Simular un retraso de red
+    await Future.delayed(const Duration(seconds: 1));
 
-    // Validamos la longitud de la contraseña
-    if (password.length < 6) {
-      throw Exception('La contraseña debe tener al menos 6 caracteres');
-    }
-
-    // En una implementación real, aquí haríamos la llamada API
-    // Por ahora simulamos éxito y retornamos un usuario con un ID generado
+    // En implementación real: enviar datos al servidor y recibir respuesta
     return UserEntity(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
       email: email,
       preferredSeason: preferredSeason,
     );
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    // Simular retraso de red
+    await Future.delayed(const Duration(seconds: 1));
+
+    // En implementación real: llamar a API para solicitar restablecimiento
+    return;
   }
 }

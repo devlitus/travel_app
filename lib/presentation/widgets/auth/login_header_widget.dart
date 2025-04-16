@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../common/spacing.dart';
 
-/// Sección superior con logo y mensaje de bienvenida para la pantalla de login
-///
-/// Muestra el logo de la aplicación con una animación de escala y un mensaje
-/// de bienvenida con animación de opacidad.
+/// Widget que muestra el encabezado de la pantalla de login
 class LoginHeaderWidget extends StatelessWidget {
-  /// Constructor para el widget de cabecera de login
   const LoginHeaderWidget({super.key});
 
   @override
@@ -13,49 +10,29 @@ class LoginHeaderWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 24),
-        // Logo con sutil animación de escala
-        TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.8, end: 1.0),
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeOutBack,
-          builder: (context, value, child) {
-            return Transform.scale(scale: value, child: child);
-          },
-          child: Hero(
-            tag: 'app_logo',
-            child: Image.asset('assets/images/logo.png', height: 100),
+        // Logo
+        Center(
+          child: Image.asset('assets/images/logo.png', height: 80, width: 80),
+        ),
+        Spacing.height(Spacing.m),
+
+        // Título de bienvenida
+        Text(
+          '¡Bienvenido!',
+          style: theme.textTheme.headlineLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 24),
-        // Mensaje de bienvenida con animación de opacidad
-        TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeOut,
-          builder: (context, value, child) {
-            return Opacity(opacity: value, child: child);
-          },
-          child: Column(
-            children: [
-              Text(
-                '¡Bienvenido!',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Inicia sesión para descubrir tu próxima aventura',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
-                ),
-              ),
-            ],
+        Spacing.height(Spacing.s),
+
+        // Subtítulo
+        Text(
+          'Inicia sesión para descubrir destinos increíbles',
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: Colors.white.withOpacity(0.9),
           ),
         ),
       ],
