@@ -124,7 +124,7 @@ class GradientButtonWidget extends StatelessWidget {
                     ? SizedBox(
                       height: loadingSize,
                       width: loadingSize,
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         strokeWidth: 2.5,
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
@@ -137,7 +137,7 @@ class GradientButtonWidget extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    final defaultTextStyle = TextStyle(
+    const defaultTextStyle = TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
       letterSpacing: 0.5,

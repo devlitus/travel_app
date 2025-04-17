@@ -11,12 +11,12 @@ class LoginFooterWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: Spacing.m),
+      padding: const EdgeInsets.symmetric(vertical: Spacing.m),
       child: Column(
         children: [
           // Línea divisoria sutil para separación visual
           Divider(
-            color: theme.colorScheme.onSurface.withOpacity(0.1),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
             thickness: 1,
             indent: 40,
             endIndent: 40,
@@ -37,7 +37,7 @@ class LoginFooterWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: theme.colorScheme.primary.withOpacity(0.3),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),

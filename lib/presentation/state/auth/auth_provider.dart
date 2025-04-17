@@ -63,7 +63,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // En una implementación real, aquí se usaría un servicio de autenticación
       final String mockToken =
           'jwt-token-${DateTime.now().millisecondsSinceEpoch}';
-      final String mockUserId = 'user-123';
+      const String mockUserId = 'user-123';
 
       // Actualizar estado con la autenticación exitosa
       state = state.copyWith(

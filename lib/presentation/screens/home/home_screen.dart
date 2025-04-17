@@ -9,7 +9,6 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
       body: Center(
         child: Text(
           'Bienvenido a la pantalla de inicio',
