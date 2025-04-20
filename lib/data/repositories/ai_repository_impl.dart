@@ -1,4 +1,3 @@
-import '../../domain/entities/trip_description_entity.dart';
 import '../../domain/repositories/ai_repository.dart';
 import '../datasources/ai_text_generator_datasource.dart';
 

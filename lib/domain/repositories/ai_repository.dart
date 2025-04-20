@@ -1,5 +1,3 @@
-import '../entities/trip_description_entity.dart';
-
 /// Interfaz que define las operaciones del repositorio de IA
 abstract class AiRepository {
   /// Genera un itinerario de viaje detallado con timeline de actividades

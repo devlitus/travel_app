@@ -21,7 +21,7 @@ class _ItineraryGeneratorScreenState
   final _formKey = GlobalKey<FormState>();
   final _destinationController = TextEditingController();
   int _days = 3;
-  List<String> _selectedInterests = [];
+  final List<String> _selectedInterests = [];
   String? _selectedBudget;
   bool _isFirstBuild = true;
   late AnimationController _animationController;
