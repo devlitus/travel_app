@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:travel/core/config/environment_config.dart';
 
 import 'app/app.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Cargar variables de entorno
+  await EnvironmentConfig.initialize();
 
   // Configurar orientación preferida
   SystemChrome.setPreferredOrientations([

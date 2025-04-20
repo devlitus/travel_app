@@ -37,7 +37,7 @@ class LoginScreen extends ConsumerWidget {
     if (authState.isAuthenticated) {
       // Navegar a la pantalla principal después de autenticar
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/itinerary-generator');
       });
     }
 
