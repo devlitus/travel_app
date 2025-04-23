@@ -8,7 +8,7 @@ import 'package:travel/domain/entities/destination_image_entity.dart';
 import 'package:travel/domain/repositories/destination_image_repository.dart';
 
 /// Implementación del repositorio para manejo de imágenes de destinos
-class DestinationImageRepositoryImpl implements DestinationImageRepository {
+class DestinationImageRepositoryImpl extends DestinationImageRepository {
   final StableDiffusionApiService _apiService;
   final LocalStorageService _storageService;
   final Uuid _uuid = const Uuid();
