@@ -5,8 +5,8 @@ import 'package:dartz/dartz.dart';
 import '../../core/exceptions/app_exception.dart';
 import '../entities/failure.dart';
 
-/// Mixin que proporciona funcionalidad común para todos los repositorios
-mixin BaseRepository {
+/// Clase base que proporciona funcionalidad común para todos los repositorios
+abstract class BaseRepository {
   /// Ejecuta una acción asíncrona y maneja sus excepciones
   ///
   /// Convierte excepciones específicas en tipos de [Failure] apropiados
