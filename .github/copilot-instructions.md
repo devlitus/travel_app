@@ -323,3 +323,11 @@ lib/
 ├── l10n/                     # Internacionalización
 │
 └── main.dart                 # Punto de entrada
+
+# Implementation of code
+
+- Generate code that not only works, but is easy to understand, modify, maintain, test and secure by a human developer. Follow standard best practices, be consistent and prioritize clarity.
+- Avoid generating code that is overly complex or difficult to understand. If you find yourself writing complex code, take a step back and simplify it. Aim for clarity and simplicity in your code.
+- Avoid generating code that is overly verbose or repetitive. Use concise and clear language to express your ideas. If you find yourself repeating the same code or logic, consider refactoring it into a reusable function or class.
+- for each implementation performed ensure that everything continues to function correctly
+- do not replace existing functionalities
