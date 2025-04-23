@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel/presentation/widgets/itinerary/budget_selector_widget.dart';
+import 'package:travel/presentation/widgets/itinerary/destination_input_widget.dart';
+import 'package:travel/presentation/widgets/itinerary/interests_selector_widget.dart';
+import 'package:travel/presentation/widgets/itinerary/trip_duration_selector_widget.dart';
 import '../../../core/constants/spacing.dart';
 import '../../common/gradient_button_widget.dart';
+import '../../common/error_message_widget.dart';
 import '../../state/itinerary/itinerary_provider.dart';
 
 class ItineraryGeneratorScreen extends ConsumerStatefulWidget {
@@ -78,7 +83,6 @@ class _ItineraryGeneratorScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(itineraryProvider);
-    final theme = Theme.of(context);
 
     // Manejar la navegación cuando el itinerario esté listo
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -109,149 +113,39 @@ class _ItineraryGeneratorScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '¿A dónde te gustaría ir?',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: Spacing.s),
-                    Text(
-                      'Personaliza tu viaje ideal respondiendo estas preguntas',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
                     const SizedBox(height: Spacing.l),
-                    TextFormField(
-                      controller: _destinationController,
-                      decoration: InputDecoration(
-                        labelText: 'Destino',
-                        hintText: 'Ej: París, Roma, Barcelona...',
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor ingresa un destino';
-                        }
-                        return null;
+                    DestinationInputWidget(controller: _destinationController),
+                    const SizedBox(height: Spacing.l),
+                    TripDurationSelectorWidget(
+                      days: _days,
+                      onDaysChanged: (newDays) {
+                        setState(() {
+                          _days = newDays;
+                        });
                       },
                     ),
                     const SizedBox(height: Spacing.l),
-                    Text(
-                      'Duración del viaje',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Slider(
-                            value: _days.toDouble(),
-                            min: 1,
-                            max: 7,
-                            divisions: 6,
-                            label: '$_days días',
-                            onChanged: (value) {
-                              HapticFeedback.selectionClick();
-                              setState(() => _days = value.round());
-                            },
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Spacing.m,
-                            vertical: Spacing.s,
-                          ),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            '$_days días',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: theme.colorScheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ),
-                      ],
+                    InterestsSelectorWidget(
+                      interests: _interests,
+                      selectedInterests: _selectedInterests,
+                      onInterestToggled: (interest, isSelected) {
+                        setState(() {
+                          if (isSelected) {
+                            _selectedInterests.add(interest);
+                          } else {
+                            _selectedInterests.remove(interest);
+                          }
+                        });
+                      },
                     ),
                     const SizedBox(height: Spacing.l),
-                    Text(
-                      'Intereses',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: Spacing.s),
-                    Wrap(
-                      spacing: Spacing.s,
-                      runSpacing: Spacing.s,
-                      children:
-                          _interests.map((interest) {
-                            final isSelected = _selectedInterests.contains(
-                              interest,
-                            );
-                            return FilterChip(
-                              label: Text(interest),
-                              selected: isSelected,
-                              showCheckmark: false,
-                              avatar:
-                                  isSelected
-                                      ? Icon(
-                                        Icons.check_circle,
-                                        color: theme.colorScheme.primary,
-                                        size: 18,
-                                      )
-                                      : null,
-                              onSelected: (selected) {
-                                HapticFeedback.selectionClick();
-                                setState(() {
-                                  if (selected) {
-                                    _selectedInterests.add(interest);
-                                  } else {
-                                    _selectedInterests.remove(interest);
-                                  }
-                                });
-                              },
-                            );
-                          }).toList(),
-                    ),
-                    const SizedBox(height: Spacing.l),
-                    Text(
-                      'Presupuesto',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: Spacing.s),
-                    DropdownButtonFormField<String>(
-                      value: _selectedBudget,
-                      decoration: InputDecoration(
-                        hintText: 'Selecciona tu presupuesto',
-                        prefixIcon: const Icon(Icons.account_balance_wallet),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      items:
-                          _budgetOptions.map((budget) {
-                            return DropdownMenuItem(
-                              value: budget,
-                              child: Text(
-                                budget.substring(0, 1).toUpperCase() +
-                                    budget.substring(1),
-                              ),
-                            );
-                          }).toList(),
-                      onChanged: (value) {
-                        HapticFeedback.selectionClick();
-                        setState(() => _selectedBudget = value);
+                    BudgetSelectorWidget(
+                      budgetOptions: _budgetOptions,
+                      selectedBudget: _selectedBudget,
+                      onBudgetChanged: (value) {
+                        setState(() {
+                          _selectedBudget = value;
+                        });
                       },
                     ),
                     const SizedBox(height: Spacing.xl),
@@ -265,34 +159,7 @@ class _ItineraryGeneratorScreenState
                 ),
               ),
               const SizedBox(height: Spacing.l),
-              if (state.error != null)
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: Card(
-                    color: theme.colorScheme.errorContainer,
-                    child: Padding(
-                      padding: const EdgeInsets.all(Spacing.m),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: theme.colorScheme.onErrorContainer,
-                          ),
-                          const SizedBox(width: Spacing.m),
-                          Expanded(
-                            child: Text(
-                              state.error!,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onErrorContainer,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              if (state.error != null) ErrorMessageWidget(error: state.error!),
             ],
           ),
         ),
