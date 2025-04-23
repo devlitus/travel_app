@@ -56,7 +56,7 @@ class ItineraryDetailsScreen extends ConsumerWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   theme.colorScheme.primary,
-                  theme.colorScheme.primary.withOpacity(0.8),
+                  theme.colorScheme.primary.withValues(alpha: 0.8),
                 ],
               ),
             ),
@@ -117,7 +117,7 @@ class ItineraryDetailsScreen extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
-                        color: theme.colorScheme.outline.withOpacity(0.1),
+                        color: theme.colorScheme.outline.withValues(alpha: 0.1),
                       ),
                     ),
                     child: Padding(
