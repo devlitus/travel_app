@@ -225,3 +225,146 @@ class DestinationImageWidget extends ConsumerWidget {
     );
   }
 }
+
+/// Widget simplificado para mostrar una imagen de un destino desde una ruta local
+///
+/// Este widget maneja el caso de error si la imagen no existe o no se puede cargar.
+/// Si la imagen local no existe, intentará cargar una imagen de respaldo desde assets/images.
+class SimpleDestinationImageWidget extends StatelessWidget {
+  /// Ruta local de la imagen a mostrar
+  final String imagePath;
+
+  /// Altura del widget (opcional)
+  final double? height;
+
+  /// Ancho del widget (opcional)
+  final double? width;
+
+  /// Cómo debe ajustarse la imagen dentro del espacio disponible
+  final BoxFit? fit;
+
+  /// Nombre del asset de respaldo si la imagen local falla (sin la extensión)
+  final String? fallbackAssetName;
+
+  /// Constructor
+  const SimpleDestinationImageWidget({
+    super.key,
+    required this.imagePath,
+    this.height,
+    this.width,
+    this.fit = BoxFit.contain,
+    this.fallbackAssetName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: height,
+      width: width,
+      child: _buildImage(theme),
+    );
+  }
+
+  Widget _buildImage(ThemeData theme) {
+    // Verificar si hay una ruta de imagen
+    if (imagePath.isEmpty) {
+      // Si no hay ruta, intentar cargar imagen de respaldo
+      return _tryLoadFallbackImage(theme) ??
+          _buildErrorWidget(theme, 'No hay ruta de imagen');
+    }
+
+    // Intentar cargar la imagen desde el almacenamiento local
+    try {
+      final file = File(imagePath);
+
+      // Verificar si el archivo existe
+      if (!file.existsSync()) {
+        // Si el archivo no existe, intentar cargar imagen de respaldo
+        return _tryLoadFallbackImage(theme) ??
+            _buildErrorWidget(theme, 'La imagen no existe');
+      }
+
+      return Image.file(
+        file,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          // Si hay error al cargar el archivo, intentar con imagen de respaldo
+          return _tryLoadFallbackImage(theme) ??
+              _buildErrorWidget(theme, 'Error al cargar imagen');
+        },
+      );
+    } catch (e) {
+      // Si hay excepción, intentar con imagen de respaldo
+      return _tryLoadFallbackImage(theme) ??
+          _buildErrorWidget(theme, 'Error: ${e.toString()}');
+    }
+  }
+
+  /// Intenta cargar una imagen de respaldo desde assets/images
+  Widget? _tryLoadFallbackImage(ThemeData theme) {
+    final assetName = fallbackAssetName ?? _getDefaultAssetName(imagePath);
+
+    if (assetName.isEmpty) return null;
+
+    try {
+      return Image.asset(
+        'assets/images/$assetName.png',
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          // Si falla el PNG, intenta con JPG
+          return Image.asset(
+            'assets/images/$assetName.jpg',
+            fit: fit,
+            errorBuilder: (_, __, ___) => const SizedBox
+                .shrink(), // Retornamos un widget vacío en vez de null
+          );
+        },
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Extrae un nombre de asset predeterminado de la ruta de la imagen
+  String _getDefaultAssetName(String path) {
+    if (path.isEmpty) return '';
+
+    // Intenta extraer el nombre base del archivo sin extensión
+    final fileName = path.split('/').last.split('\\').last;
+    final baseName = fileName.contains('.')
+        ? fileName.substring(0, fileName.lastIndexOf('.'))
+        : fileName;
+
+    return baseName;
+  }
+
+  Widget _buildErrorWidget(ThemeData theme, String errorMessage) {
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceVariant,
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.image_not_supported,
+              size: 48,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              errorMessage,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
